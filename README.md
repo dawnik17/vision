@@ -16,29 +16,12 @@ The repository follows a specific directory structure:
 
 ### src/model.py
 
-The `model.py` file contains the implementation of the neural network model architecture. The current architecture has been chosen to support the objectives of the project. Here is a summary of the model's layers and parameters:
+Our model achieves an impressive accuracy of **99.61%** in just 20 Epochs, utilizing a mere **13,244 parameters**. However, by reducing the channel size to 8 in the second basic block, we can still attain a remarkable accuracy of **99.41%** within the same 20 Epochs, while significantly reducing the parameter count to just **6,716**.
 
-```
-----------------------------------------------------------------
-        Layer (type)               Output Shape         Param #
-================================================================
-            Conv2d-1           [-1, 32, 26, 26]             320
-            Conv2d-2           [-1, 64, 24, 24]          18,496
-            Conv2d-3          [-1, 128, 10, 10]          73,856
-            Conv2d-4            [-1, 256, 8, 8]         295,168
-            Linear-5                   [-1, 50]         204,850
-            Linear-6                   [-1, 10]             510
-================================================================
-Total params: 593,200
-Trainable params: 593,200
-Non-trainable params: 0
-----------------------------------------------------------------
-Input size (MB): 0.00
-Forward/backward pass size (MB): 0.67
-Params size (MB): 2.26
-Estimated Total Size (MB): 2.94
-----------------------------------------------------------------
-```
+
+The `model.py` file contains the implementation of the neural network model architecture. The current architecture has been chosen to support the objectives of the project. Here is the model architecture:
+
+![Model Architecture](images/mnist.png)
 
 ### src/utils.py
 

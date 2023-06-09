@@ -1,24 +1,93 @@
+import torch
 import torch.nn as nn
-import torch.nn.functional as F
+
+
+class BasicBlock(nn.Module):
+    def __init__(self, inchannel, dropout, number_of_layers=2):
+        super(BasicBlock, self).__init__()
+        self.blocks = nn.ModuleList(
+            [
+                nn.Sequential(
+                    nn.Conv2d(
+                        in_channels=inchannel,
+                        out_channels=inchannel,
+                        kernel_size=3,
+                        stride=1,
+                        bias=False,
+                        padding=1,
+                    ),
+                    nn.BatchNorm2d(inchannel),
+                    nn.ReLU(),
+                    nn.Dropout(dropout),
+                )
+                for _ in range(number_of_layers)
+            ]
+        )
+
+    def forward(self, x):
+        identity = x.clone()
+
+        for block in self.blocks:
+            x = block(x)
+            identity = torch.add(identity, x)
+
+        return identity
+
+
+class InputBlock(nn.Module):
+    def __init__(self, outchannel, dropout, number_of_layers=2):
+        super(InputBlock, self).__init__()
+        self.block1 = nn.Sequential(
+            nn.Conv2d(
+                in_channels=1,
+                out_channels=outchannel,
+                kernel_size=3,
+                stride=1,
+                bias=False,
+                padding=1,
+            ),
+            nn.BatchNorm2d(outchannel),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+        )
+
+        self.block2 = BasicBlock(outchannel, dropout, number_of_layers - 1)
+
+    def forward(self, x):
+        x = self.block1(x)
+        return self.block2(x)
 
 
 class Net(nn.Module):
-    def __init__(self):
+    def __init__(self, dropout=0.):
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(1, 32, kernel_size=3)
-        self.conv2 = nn.Conv2d(32, 64, kernel_size=3)
-        self.conv3 = nn.Conv2d(64, 128, kernel_size=3)
-        self.conv4 = nn.Conv2d(128, 256, kernel_size=3)
-        self.fc1 = nn.Linear(4096, 50)
-        self.fc2 = nn.Linear(50, 10)
+        self.convb0 = InputBlock(8, dropout, 3)
+
+        self.bottleneck1 = nn.Conv2d(
+            8, 8, kernel_size=3, stride=2, bias=False, padding=1
+        )
+        self.convb1 = BasicBlock(8, dropout, 3)
+
+        self.bottleneck2 = nn.Conv2d(
+            8, 16, kernel_size=3, stride=2, bias=False, padding=1
+        )
+        self.convb2 = BasicBlock(16, dropout, 3)
+
+        self.convb3 = nn.Sequential(
+            nn.Conv2d(16, 10, kernel_size=3, stride=1, bias=False),
+            nn.BatchNorm2d(10),
+            nn.ReLU(),
+            nn.AvgPool2d(5, 5),
+            nn.Flatten(),
+        )
 
     def forward(self, x):
-        x = F.relu(self.conv1(x), 2) # 28>26 | 1>3 | 1>1
-        x = F.relu(F.max_pool2d(self.conv2(x), 2)) #26>24>12 | 3>5>6 | 1>1>2
-        x = F.relu(self.conv3(x), 2) # 12>10 | 6>10 | 2>2
-        x = F.relu(F.max_pool2d(self.conv4(x), 2)) # 10>8>4 | 10>14>16 | 2>2>4
+        x = self.convb0(x)
 
-        x = x.view(-1, 4096)
-        x = F.relu(self.fc1(x))
-        x = self.fc2(x)
-        return F.log_softmax(x, dim=1)
+        x = self.bottleneck1(x)
+        x = self.convb1(x)
+
+        x = self.bottleneck2(x)
+        x = self.convb2(x)
+
+        return self.convb3(x)
