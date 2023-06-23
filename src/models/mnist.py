@@ -94,7 +94,7 @@ class MNIST13k(nn.Module):
 
 
 class MNIST8k(nn.Module):
-    def __init__(self, dropout=0.):
+    def __init__(self, dropout=0.0):
         super(MNIST8k, self).__init__()
         input_channels = 8
         input_layers = 2

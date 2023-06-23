@@ -83,7 +83,7 @@ def test(model, device, test_loader, criterion):
 
 
 def plot_stats():
-    fig, axs = plt.subplots(2,2,figsize=(15,10))
+    fig, axs = plt.subplots(2, 2, figsize=(15, 10))
     axs[0, 0].plot(train_losses)
     axs[0, 0].set_title("Training Loss")
     axs[1, 0].plot(train_acc)
@@ -106,7 +106,7 @@ class PlotOutput:
     def reset(self):
         self.result = {"images": [], "target": [], "prediction": [], "confidence": []}
 
-    def run_prediction(self, model, data_loader, ptype="incorrect"):
+    def run_prediction(self, model, data_loader, class_list, ptype="incorrect"):
         self.reset()
         model.eval()
 
@@ -122,11 +122,17 @@ class PlotOutput:
                 idx = idx.nonzero(as_tuple=True)[0].tolist()
 
                 self.result["images"].extend(list(data[idx].cpu()))
-                self.result["prediction"].extend(values[idx].tolist())
-                self.result["target"].extend(target[idx].tolist())
+                self.result["prediction"].extend(
+                    [class_list[v] for v in values[idx].tolist()]
+                )
+                self.result["target"].extend(
+                    [class_list[t] for t in target[idx].tolist()]
+                )
                 self.result["confidence"].extend(score[idx].tolist())
 
     def plot(self, n: int, reverse: bool = True):
+        cmap = "gray" if self.result["images"][0].shape[0] == 1 else None
+
         grid_size = (math.ceil(n / 4), 4)
         fig, axs = plt.subplots(grid_size[0], grid_size[1], figsize=(12, 8))
         fig.tight_layout()
@@ -138,7 +144,12 @@ class PlotOutput:
 
         for i, ax in enumerate(axs.flat):
             j = sorted_indices[i]
-            ax.imshow(self.result["images"][j].squeeze(0), cmap="gray")
+
+            image = self.result["images"][j]
+            image = image.clip(0, 1)
+            image = image.squeeze(0) if cmap == "gray" else image.permute(1, 2, 0)
+
+            ax.imshow(image, cmap=cmap)
 
             ititle = self.title.format(
                 target=self.result["target"][j],
