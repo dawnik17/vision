@@ -16,7 +16,7 @@ def get_device():
     return "cuda" if torch.cuda.is_available() else "cpu"
 
 
-def train(model, device, train_loader, optimizer, criterion):
+def train(model, device, train_loader, optimizer, criterion, scheduler=None):
     model.train()
     pbar = tqdm(train_loader)
 
@@ -38,6 +38,9 @@ def train(model, device, train_loader, optimizer, criterion):
         # Backpropagation
         loss.backward()
         optimizer.step()
+
+        if scheduler is not None:
+            scheduler.step()
 
         correct += (pred.argmax(-1) == target).sum().item()
         processed += len(data)
