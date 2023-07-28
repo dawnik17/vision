@@ -118,23 +118,23 @@ Class Activation Map through 25 Epochs: A Demonstration of How the Model Learns.
 <table>
   <tr>
     <td align="center">
-      <img src="images/cam/ship.gif" width="100" height="100" loop>
+      <img src="examples/cifar10/images/cam/ship.gif" width="100" height="100" loop>
       <br>Ship
     </td>
     <td align="center">
-      <img src="images/cam/airplane.gif" width="100" height="100" loop>
+      <img src="examples/cifar10/images/cam/airplane.gif" width="100" height="100" loop>
       <br>Airplane
     </td>
     <td align="center">
-      <img src="images/cam/bird.gif" width="100" height="100" loop>
+      <img src="examples/cifar10/images/cam/bird.gif" width="100" height="100" loop>
       <br>Bird
     </td>
     <td align="center">
-      <img src="images/cam/dog.gif" width="100" height="100" loop>
+      <img src="examples/cifar10/images/cam/dog.gif" width="100" height="100" loop>
       <br>Dog
     </td>
     <td align="center">
-      <img src="images/cam/frog.gif" width="100" height="100" loop>
+      <img src="examples/cifar10/images/cam/frog.gif" width="100" height="100" loop>
       <br>Frog
     </td>
   </tr>
@@ -144,13 +144,13 @@ Class Activation Map through 25 Epochs: A Demonstration of How the Model Learns.
 
 Our trained model has demonstrated exceptional performance, achieving high accuracy even on challenging images from the CIFAR-10 dataset. Here are some examples of correctly classified images:
 
-![Correctly Classified Images](images/correct_classification.png)
-![Correctly Classified Images](images/correct_classification_cam.png)
+![Correctly Classified Images](examples/cifar10/images/correct_classification.png)
+![Correctly Classified Images](examples/cifar10/images/correct_classification_cam.png)
 
 However, it is important to note that there are instances where our model struggles to make accurate predictions. The following images present significant challenges for comprehension:
 
-![Incorrectly Classified Images](images/incorrect_classification.png)
-![Incorrectly Classified Images](images/incorrect_classification_cam.png)
+![Incorrectly Classified Images](examples/cifar10/images/incorrect_classification.png)
+![Incorrectly Classified Images](examples/cifar10/images/incorrect_classification_cam.png)
 
 These instances serve as a reminder that even state-of-the-art models have limitations when confronted with highly ambiguous or complex images.
 
