@@ -8,7 +8,7 @@ The objective of this project is to develop a neural network model that accurate
 
 The CIFAR-10 dataset is a well-known benchmark extensively used for image classification tasks. It consists of 50,000 training images and 10,000 testing images, each representing a colored image with dimensions of 32x32 pixels. The dataset is divided into ten classes, namely `'plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', and 'truck'`, with each class containing 5,000 images.
 
-![CIFAR-10 Dataset Sample](images/data_sample.png)
+![CIFAR-10 Dataset Sample](examples/cifar10/images/data_sample.png)
 
 ## Directory Structure
 
