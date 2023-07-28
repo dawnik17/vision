@@ -224,7 +224,7 @@ class TrainTest:
                 os.makedirs(output_directory)
 
             image_path = os.path.join(output_directory, f"{label}.gif")
-            imageio.mimsave(image_path, images, duration=10 * len(images))
+            imageio.mimsave(image_path, images, duration=10 * len(images), loop=0)
 
 
 class CAM:
