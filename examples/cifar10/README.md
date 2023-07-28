@@ -114,9 +114,33 @@ The main file for this project is the Jupyter Notebook file, `cifar.ipynb`. It e
 ## Results
 Class Activation Map through 25 Epochs: A Demonstration of How the Model Learns.
 
-Ship | Airplane | Bird | Dog | Frog |
-:---:|:--------:|:----:|:---:|:----:|
-<img src="images/cam/ship.gif"  width="100" height="100">  |  <img src="images/cam/airplane.gif"  width="100" height="100"> |  <img src="images/cam/bird.gif"  width="100" height="100"> |  <img src="images/cam/dog.gif"  width="100" height="100"> |  <img src="images/cam/frog.gif"  width="100" height="100">
+<!-- markdownlint-disable MD033 -->
+<table>
+  <tr>
+    <td align="center">
+      <img src="images/cam/ship.gif" width="100" height="100" loop>
+      <br>Ship
+    </td>
+    <td align="center">
+      <img src="images/cam/airplane.gif" width="100" height="100" loop>
+      <br>Airplane
+    </td>
+    <td align="center">
+      <img src="images/cam/bird.gif" width="100" height="100" loop>
+      <br>Bird
+    </td>
+    <td align="center">
+      <img src="images/cam/dog.gif" width="100" height="100" loop>
+      <br>Dog
+    </td>
+    <td align="center">
+      <img src="images/cam/frog.gif" width="100" height="100" loop>
+      <br>Frog
+    </td>
+  </tr>
+</table>
+<!-- markdownlint-enable MD033 -->
+
 
 Our trained model has demonstrated exceptional performance, achieving high accuracy even on challenging images from the CIFAR-10 dataset. Here are some examples of correctly classified images:
 
