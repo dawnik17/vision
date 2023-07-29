@@ -5,3 +5,4 @@ torchsummary
 matplotlib
 imageio
 grad-cam
+pillow

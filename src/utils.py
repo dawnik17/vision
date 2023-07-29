@@ -196,15 +196,15 @@ class TrainTest:
         std = dataset.std
 
         for idx in image_idx:
-            image, label = dataset[idx]
-
-            input_tensor = (image * std + mean).unsqueeze(0)
-            visualization = self.cam(input_tensor, label)
+            input_tensor, label = dataset[idx]
+            visualization = self.cam(input_tensor.unsqueeze(0), label, mean, std)
 
             if idx not in self.cam_results:
+                image = input_tensor * std + mean
+
                 self.cam_results[idx] = [
                     label,
-                    (input_tensor[0].permute(1, 2, 0) * 255).numpy().astype("uint8"),
+                    (image.permute(1, 2, 0) * 255).numpy().astype("uint8"),
                     visualization,
                 ]
 
@@ -235,7 +235,7 @@ class CAM:
             use_cuda=device == "cuda",
         )
 
-    def __call__(self, input_tensor, label):
+    def __call__(self, input_tensor, label, mean, std):
         targets = [ClassifierOutputTarget(label)]
 
         grayscale_cam = self.cam(
@@ -245,6 +245,7 @@ class CAM:
             eigen_smooth=True,
         )
 
+        input_tensor = (input_tensor[0] * std + mean).unsqueeze(0)
         input_tensor = input_tensor.permute(0, 2, 3, 1).numpy()
         return show_cam_on_image(input_tensor, grayscale_cam[0, :], use_rgb=True)[0]
 
@@ -316,17 +317,20 @@ class PlotOutput:
         for i, ax in enumerate(axs.flat):
             j = sorted_indices[i]
 
+            # [3, 32, 32]
             image = self.result["images"][j]
-            image = self.denormalise(image)
-            image = image.clip(0, 1)
 
             if not grad_cam:
+                image = self.denormalise(image)
+                image = image.clip(0, 1)
                 image = image.squeeze(0) if cmap == "gray" else image.permute(1, 2, 0)
 
             else:
-                # image.unsqueeze(0) shape [1, 3, 32, 32]
                 image = self.cam(
-                    input_tensor=image.unsqueeze(0), label=self.result["prediction"][j]
+                    input_tensor=image.unsqueeze(0),
+                    label=self.result["prediction"][j],
+                    mean=self.mean,
+                    std=self.std,
                 )
 
             ax.imshow(image, cmap=cmap)
