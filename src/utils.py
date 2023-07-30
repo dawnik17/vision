@@ -13,8 +13,8 @@ from tqdm import tqdm
 
 
 class Train:
-    def __init__(self, model, trainloader, optimizer, criterion, scheduler=None):
-        self.device = self.get_device()
+    def __init__(self, model, trainloader, optimizer, criterion, device, scheduler=None):
+        self.device = device
         self.model = model.to(self.device)
 
         self.trainloader = trainloader
@@ -26,9 +26,6 @@ class Train:
 
         self.train_losses = []
         self.train_accuracy = []
-
-    def get_device(self):
-        return "cuda" if torch.cuda.is_available() else "cpu"
 
     def __call__(self):
         self.model.train()
@@ -87,8 +84,8 @@ class Train:
 
 
 class Test:
-    def __init__(self, model, testloader, criterion):
-        self.device = self.get_device()
+    def __init__(self, model, testloader, criterion, device):
+        self.device = device
         self.model = model.to(self.device)
 
         self.testloader = testloader
@@ -96,9 +93,6 @@ class Test:
 
         self.test_losses = []
         self.test_accuracy = []
-
-    def get_device(self):
-        return "cuda" if torch.cuda.is_available() else "cpu"
 
     def __call__(self):
         self.model.eval()
@@ -155,8 +149,9 @@ class TrainTest:
         scheduler,
         target_layers=None,
     ):
-        self.train = Train(model, trainloader, optimizer, criterion, scheduler)
-        self.test = Test(model, testloader, criterion)
+        device = self.get_device()
+        self.train = Train(model, trainloader, optimizer, criterion, device, scheduler)
+        self.test = Test(model, testloader, criterion, device)
 
         self.scheduler_per_epoch = scheduler.__class__.__name__.lower() != "onecyclelr"
         self.scheduler = scheduler
@@ -164,6 +159,10 @@ class TrainTest:
         self.cam = None
         self.target_layers = target_layers
         self.cam_results = dict()
+        
+    @staticmethod
+    def get_device():
+        return "cuda" if torch.cuda.is_available() else "cpu"
 
     def __call__(self, epochs, cam=False, image_idx=None):
         if cam and image_idx is None:
@@ -177,7 +176,10 @@ class TrainTest:
                 self.grad_cam(image_idx)
 
             if self.scheduler_per_epoch:
-                self.scheduler.step()
+                if self.scheduler.__class__.__name__.lower() == "reducelronplateau":
+                    self.scheduler.step(self.test.test_losses[-1])
+                else:
+                    self.scheduler.step()
 
     def plot(self):
         self.train.plot_stats()
