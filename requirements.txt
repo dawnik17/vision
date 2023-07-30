@@ -6,3 +6,4 @@ matplotlib
 imageio
 grad-cam
 pillow
+torch_lr_finder
