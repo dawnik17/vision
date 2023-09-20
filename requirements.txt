@@ -1,4 +1,4 @@
-torch
+torch==2.0.1
 torchvision
 tqdm
 torchsummary
@@ -7,3 +7,5 @@ imageio
 grad-cam
 pillow
 torch_lr_finder
+albumentations
+git+https://github.com/dawnik17/transformer.git
