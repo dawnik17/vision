@@ -175,7 +175,7 @@ class TrainTest:
             if cam:
                 self.grad_cam(image_idx)
 
-            if self.scheduler_per_epoch:
+            if self.scheduler is not None and self.scheduler_per_epoch:
                 if self.scheduler.__class__.__name__.lower() == "reducelronplateau":
                     self.scheduler.step(self.test.test_losses[-1])
                 else:
