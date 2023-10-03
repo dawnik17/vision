@@ -1,0 +1,44 @@
+Task: Build a classifier which can identify 'fraud' orders.
+Each row represents an 'order', it's corresponding details and some aggregated features.
+
+==========================================================
+Data definition:
+==========================================================
+order_id: unique id for each order
+product_id: id of product purchased
+quantity: quantity in that order //people can buy multiple quantity
+selling_price: final price which user paid
+order_date: date when order was placed
+shipping_type: can be 'ndd' (next-day-delivery for which user pays premium) or 'non-ndd' (free shipping option)
+user_id: unique id associated with each user
+user_account_created_date: date on which user account was created
+address_id: unique id representing shipping address
+city: city of shipping address
+pincode: pincode of shipping address
+phone: user phone number
+vertical: vertical of the product
+discount: discount user availed for this order
+count_14_days: count of quantity purchased by this user in last 14 days
+count_28_days:
+count_56_days:
+category_purchase_count_X4rr: count of products bought from 'X4rr' category by this user
+category_purchase_count_dep:
+category_purchase_count_kyh:
+category_purchase_count_mgl:
+category_purchase_count_dgv:
+category_purchase_count_ixq:
+category_purchase_count_X26x:
+category_purchase_count_t06:
+category_purchase_count_amz:
+category_purchase_count_reh:
+category_purchase_count_ckf:
+category_purchase_count_j9e:
+category_purchase_count_jek:
+category_purchase_count_tyy:
+category_purchase_count_vdm:
+category_purchase_count_X6bo:
+category_purchase_count_X2oq:
+category_purchase_count_mcr:
+category_purchase_count_osp: 
+category_purchase_count_r18:
+label: target variable, 2 class normal, fraud
