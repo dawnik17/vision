@@ -112,6 +112,10 @@ venv.bak/
 *.json
 *.pt
 *.tar
+*.jpg
+/examples/flickr/checkpoint
+/examples/flickr/dataset8k
+/examples/flickr/dataset30k
 logs/
 .DS_Store
 © 2020 GitHub, Inc.
